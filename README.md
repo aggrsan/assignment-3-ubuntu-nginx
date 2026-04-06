@@ -279,3 +279,5 @@ This project is provided as-is for educational and assignment purposes.
 - Keep your private key (`adish-nginx-keypair.pem`) secure
 - Monitor AWS console for resource usage and costs
 - Destroy resources when no longer needed to avoid charges
+#   a s s i g n m e n t - 3 - u b u n t u - n g i n x  
+ 
