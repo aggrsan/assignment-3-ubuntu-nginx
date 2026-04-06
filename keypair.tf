@@ -12,7 +12,7 @@ resource "aws_key_pair" "terraform_keypair" {
 
 # Save private key to local file
 resource "local_file" "private_key" {
-  filename        = "${path.module}/adish-nginx-keypair.pem"
+  filename        = "${path.module}/sanjay-nginx-keypair.pem"
   content         = tls_private_key.terraform_key.private_key_pem
   file_permission = "0400"
 }

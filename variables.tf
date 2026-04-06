@@ -19,7 +19,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "Name of an existing EC2 key pair (optional)"
   type        = string
-  default     = "adish-nginx-keypair"
+  default     = "sanjay-nginx-keypair"
 }
 
 variable "tags_name_web" {

@@ -38,10 +38,42 @@ data "aws_ami" "ubuntu" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Get the existing security group
-data "aws_security_group" "nginx_sg" {
-  name   = "terraform-nginx-sg"
-  vpc_id = data.aws_vpc.default.id
+# Security group for the EC2 instance
+# ---------------------------------------------------------------------------------------------------------------------
+
+resource "aws_security_group" "nginx_sg" {
+  name        = "terraform-nginx-sg"
+  description = "Allow HTTP and SSH access to the Nginx instance"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    description = "HTTP"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "terraform-nginx-sg"
+    Environment = "assignment"
+    ManagedBy   = "Terraform"
+  }
 }
 
 # EC2 INSTANCE – t2.micro, Ubuntu 20.04, user_data to install Nginx and custom page
@@ -51,7 +83,7 @@ resource "aws_instance" "nginx" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   subnet_id                   = data.aws_subnets.default.ids[0] # pick first default subnet
-  vpc_security_group_ids      = [data.aws_security_group.nginx_sg.id]
+  vpc_security_group_ids      = [aws_security_group.nginx_sg.id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_profile.name
   key_name                    = var.key_name
